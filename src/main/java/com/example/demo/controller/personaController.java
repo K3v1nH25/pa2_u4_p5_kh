@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,19 +32,47 @@ public class personaController {
 		return "vistaListaPersona";
 	}
 
-	@GetMapping("/buscar")
-	public String buscarPorCedula(String cedula) {
-		return null;
+	// Cuando viaja el modelo en el response
+	@GetMapping("/buscarPorCedula/{cedulaPersona}")
+	public String buscarPorCedula(@PathVariable("cedulaPersona") String cedula, Model modelo) {
+		Persona persona = this.iPersonaService.consultarPorCedula(cedula);
+		modelo.addAttribute("persona", persona);
+		return "vistaPersona";
 	}
 
-	@PutMapping("/actualizar")
-	public String actualizar() {
-		return null;
+	// cuando viaja el modelo en el request
+	@PutMapping("/actualizar/{cedulaPersona}")
+	public String actualizar(@PathVariable("cedulaPersona") String cedula, Persona persona) {
+		persona.setCedula(cedula);
+
+		Persona pers = this.iPersonaService.consultarPorCedula(cedula);
+		pers.setApellido(persona.getApellido());
+		pers.setNombre(persona.getNombre());
+		pers.setGenero(persona.getGenero());
+		pers.setCedula(persona.getCedula());
+
+		this.iPersonaService.actualizar(pers);
+		// redirect: y la url
+		return "redirect:/personas/buscar";
 	}
 
-	@DeleteMapping("/borrar")
-	public String borrar() {
-		return null;
+	@PostMapping("/insertar")
+	public String insertar(Persona persona) {
+		this.iPersonaService.guardar(persona);
+		return "redirect:/personas/buscar";
+
+	}
+
+	@GetMapping("/nuevaPersona")
+	public String mostrarNuevaPersona(Model modelo) {
+		modelo.addAttribute("persona", new Persona());
+		return "vistaNuevaPersona";
+	}
+
+	@DeleteMapping("/borrar/{cedula}")
+	public String borrar(@PathVariable("cedula") String cedula) {
+		this.iPersonaService.borrarPorCedula(cedula);
+		return "redirect:/personas/buscar";
 	}
 
 	@PostMapping("/guardar")

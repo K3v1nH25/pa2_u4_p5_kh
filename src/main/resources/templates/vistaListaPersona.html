@@ -16,6 +16,8 @@
 				<th>Nombre</th>
 				<th>Apellido</th>
 				<th>Genero</th>
+				<th>Acción</th>
+				<th>Accion</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -24,6 +26,18 @@
 				<td th:text="${persona.nombre}"></td>
 				<td th:text="${persona.apellido}"></td>
 				<td th:text="${persona.genero}"></td>
+				<td>
+					<form th:action="@{/personas/buscarPorCedula/{cedulaPersona}(cedulaPersona=${persona.cedula})}"
+						th:method="GET">
+						<input type="submit" value="Actualizar">
+					</form>
+				</td>
+				<td>
+					<form th:action="@{/personas/borrar/{cedulaPersona}(cedulaPersona=${persona.cedula})}"
+						th:method="DELET">
+						<input type="submit" value="Eliminar">
+					</form>
+				</td>
 			</tr>
 		</tbody>
 	</table>
