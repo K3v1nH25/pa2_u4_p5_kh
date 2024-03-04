@@ -53,13 +53,13 @@ public class personaController {
 
 		this.iPersonaService.actualizar(pers);
 		// redirect: y la url
-		return "redirect:/personas/buscar";
+		return "redirect:/personas/buscarTodos";
 	}
 
 	@PostMapping("/insertar")
 	public String insertar(Persona persona) {
 		this.iPersonaService.guardar(persona);
-		return "redirect:/personas/buscar";
+		return "redirect:/personas/buscarTodos";
 
 	}
 
@@ -72,7 +72,7 @@ public class personaController {
 	@DeleteMapping("/borrar/{cedula}")
 	public String borrar(@PathVariable("cedula") String cedula) {
 		this.iPersonaService.borrarPorCedula(cedula);
-		return "redirect:/personas/buscar";
+		return "redirect:/personas/buscarTodos";
 	}
 
 	@PostMapping("/guardar")
